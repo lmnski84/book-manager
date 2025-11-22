@@ -1,0 +1,374 @@
+{
+	"info": {
+		"_postman_id": "366411e0-1f29-4792-ab91-e99b61cad7ef",
+		"name": "Books Collection",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50274130",
+		"_collection_link": "https://lmnski84-7444805.postman.co/workspace/Vyacheslav-Limanskiy's-Workspac~3204846e-0fd8-431a-8847-70c35a4ae216/collection/50274130-366411e0-1f29-4792-ab91-e99b61cad7ef?action=share&source=collection_link&creator=50274130"
+	},
+	"item": [
+		{
+			"name": "1. Register user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseBody = pm.response.json();\r",
+							"if (responseBody && responseBody.id) {\r",
+							"    pm.collectionVariables.set(\"register_user_id\", responseBody.id);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomVar = Math.floor(Math.random() * 30);\r",
+							"pm.collectionVariables.set(\"randomVar\", randomVar);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"login\": \"user_{{randomVar}}\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"m{{randomVar}}@m.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://books.loc/users",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "**POST Register User**\n\n**Rules**\n\n**login**, **password**, **email** - require  \n**login**, **email** - unique  \n**login** - string, min: 3, max: 50,  \n**password** - string, min: 3, max: 20,  \n**email** - email,"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseBody = pm.response.json();\r",
+							"if (responseBody && responseBody.token) {\r",
+							"    pm.collectionVariables.set(\"jwt_token\", responseBody.token);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"login\": \"user_{{randomVar}}\",\r\n  \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "http://books.loc/auth/login",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				},
+				"description": "**POST Login User with get JWT token**\n\n**Rules**\n\n**login**, **password** \\- require"
+			},
+			"response": []
+		},
+		{
+			"name": "3. View user by Id",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableCookies": false
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://books.loc/users/{{register_user_id}}",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"users",
+						"{{register_user_id}}"
+					]
+				},
+				"description": "**POST View user by id**\n\n**JWT token in Autorization Bearer header**"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Create book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseBody = pm.response.json();\r",
+							"if (responseBody && responseBody.id) {\r",
+							"    pm.collectionVariables.set(\"id_create_book\", responseBody.id);\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Title book\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://books.loc/books",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"books"
+					]
+				},
+				"description": "**POST Create book**\n\n**JWT token in Autorization Bearer header**\n\n**Rules**\n\n**title** - require"
+			},
+			"response": []
+		},
+		{
+			"name": "5. View books",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://books.loc/books",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"books"
+					]
+				},
+				"description": "**GET View books with pagination and sort**\n\n**Query parametrs**\n\nper-page=Количество_на_страницу\n\npage=Номер_страницы\n\nsort=Поле_сортировки (со знаком минус в обратном порядке)"
+			},
+			"response": []
+		},
+		{
+			"name": "6. Update book",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"New title book for id {{id_create_book}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://books.loc/books/{{id_create_book}}",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"books",
+						"{{id_create_book}}"
+					]
+				},
+				"description": "**GET View books all filter, sort and pagination**\n\n**Rules**\n\n**title** - required"
+			},
+			"response": []
+		},
+		{
+			"name": "7. View book by id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://books.loc/books/{{id_create_book}}",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"books",
+						"{{id_create_book}}"
+					]
+				},
+				"description": "**GET View book by id**"
+			},
+			"response": []
+		},
+		{
+			"name": "8. Delete book by id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://books.loc/books/{{id_create_book}}",
+					"protocol": "http",
+					"host": [
+						"books",
+						"loc"
+					],
+					"path": [
+						"books",
+						"{{id_create_book}}"
+					]
+				},
+				"description": "**DELETE Delete book by id**"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_token",
+			"value": ""
+		},
+		{
+			"key": "id_create_book",
+			"value": ""
+		},
+		{
+			"key": "randomVar",
+			"value": ""
+		},
+		{
+			"key": "register_user_id",
+			"value": ""
+		}
+	]
+}
