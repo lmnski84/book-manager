@@ -30,7 +30,8 @@
 					"script": {
 						"exec": [
 							"var randomVar = Math.floor(Math.random() * 30);\r",
-							"pm.collectionVariables.set(\"randomVar\", randomVar);"
+							"pm.collectionVariables.set(\"randomVar\", randomVar);\r",
+							"pm.collectionVariables.set(\"hostname\", 'http://127.0.0.1:8000');"
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -51,11 +52,9 @@
 					}
 				},
 				"url": {
-					"raw": "http://books.loc/users",
-					"protocol": "http",
+					"raw": "{{hostname}}/users",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"users"
@@ -85,8 +84,12 @@
 				{
 					"listen": "prerequest",
 					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
 						"packages": {},
-						"type": "text/javascript"
+						"requests": {}
 					}
 				}
 			],
@@ -109,11 +112,9 @@
 					"raw": "{\r\n  \"login\": \"user_{{randomVar}}\",\r\n  \"password\": \"123456\"\r\n}"
 				},
 				"url": {
-					"raw": "http://books.loc/auth/login",
-					"protocol": "http",
+					"raw": "{{hostname}}/auth/login",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"auth",
@@ -148,11 +149,9 @@
 					}
 				],
 				"url": {
-					"raw": "http://books.loc/users/{{register_user_id}}",
-					"protocol": "http",
+					"raw": "{{hostname}}/users/{{register_user_id}}",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"users",
@@ -205,11 +204,9 @@
 					}
 				},
 				"url": {
-					"raw": "http://books.loc/books",
-					"protocol": "http",
+					"raw": "{{hostname}}/books",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"books"
@@ -234,11 +231,9 @@
 					}
 				],
 				"url": {
-					"raw": "http://books.loc/books",
-					"protocol": "http",
+					"raw": "{{hostname}}/books",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"books"
@@ -272,11 +267,9 @@
 					"raw": "{\r\n    \"title\": \"New title book for id {{id_create_book}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://books.loc/books/{{id_create_book}}",
-					"protocol": "http",
+					"raw": "{{hostname}}/books/{{id_create_book}}",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"books",
@@ -302,11 +295,9 @@
 					}
 				],
 				"url": {
-					"raw": "http://books.loc/books/{{id_create_book}}",
-					"protocol": "http",
+					"raw": "{{hostname}}/books/{{id_create_book}}",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"books",
@@ -337,11 +328,9 @@
 					}
 				],
 				"url": {
-					"raw": "http://books.loc/books/{{id_create_book}}",
-					"protocol": "http",
+					"raw": "{{hostname}}/books/{{id_create_book}}",
 					"host": [
-						"books",
-						"loc"
+						"{{hostname}}"
 					],
 					"path": [
 						"books",
@@ -368,6 +357,10 @@
 		},
 		{
 			"key": "register_user_id",
+			"value": ""
+		},
+		{
+			"key": "hostname",
 			"value": ""
 		}
 	]
